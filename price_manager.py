@@ -44,7 +44,7 @@ class PriceManager:
 
     # Remove record with the help of id then save
     def remove_record(self, id: int) -> None:
-        self.cursor.execute("Delete from prices where id = ?", (str(id)))
+        self.cursor.execute(f"Delete from prices where id = {id}")
         self.conn.commit()
         return None
         
