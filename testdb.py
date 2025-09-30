@@ -20,7 +20,7 @@ def load_from_json(p: PriceManager, file_path: str) -> int:
 def remove_record(p: PriceManager):
    while True:
       try:
-            id_string = input("Delete records, if you press 0 the program stops")
+            id_string = input("Delete records, if you press 0 the program stops: ")
             id_number = int(id_string)
             if id_number == 0:
                break
