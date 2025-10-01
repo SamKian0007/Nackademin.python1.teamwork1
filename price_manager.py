@@ -1,14 +1,13 @@
 # price_manager.py
-import json
+import sqlite3
 from fetch_prices import get_prices
+import os
 
-DATA_FILE = "data/prices.json"   # assume data/ already exists
-
+DB_PATH = os.path.join("data", "prices.db")
 
 class PriceManager:
     def __init__(self) -> None:
-        self.data: list[dict] = []
-        self.load_data()
+        pass
 
     # Read data from file into memory
     def load_data(self) -> None:
@@ -28,11 +27,20 @@ class PriceManager:
 
     # Add one record and save
     def add_record(self, rec: dict) -> None:
-        pass
+        self.cursor.execute(
+            "Insert into prices (SEK_per_kWh, EUR_per_kWh, EXR, time_start, time_end) VALUES (?, ?, ?, ?, ?)",
+            (rec["SEK_per_kWh"], rec["EUR_per_kWh"], rec["EXR"], rec["time_start"], rec["time_end"])
+        )
+        self.conn.commit() 
+        return None
+        
 
-    # Remove the last record and save
-    def remove_last_record(self) -> None:
-        pass
+    # Remove record with the help of id then save
+    def remove_record(self, id: int) -> None:
+        self.cursor.execute("Delete from prices where id = ?", (id,))
+        self.conn.commit()
+        return None
+        
 
     # Turn one record into a nice text line
     def format_summary(self, r: dict) -> str:
@@ -41,3 +49,4 @@ class PriceManager:
     # Get fresh data from API, replace old data, save, return how many
     def fetch_and_replace(self, date: str, zone: str = "SE3") -> int:
         pass
+
